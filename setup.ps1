@@ -5,7 +5,14 @@ $composeFilePath = ".\docker-compose.yml"
 docker-compose -f $composeFilePath up -d
 
 # Wait for the containers to start
+Write-Host "Waiting for containers to start..."
 Start-Sleep -Seconds 10
+
+# Countdown
+for ($i = 10; $i -gt 0; $i--) {
+    Write-Host "Countdown: $i"
+    Start-Sleep -Seconds 1
+}
 
 # Define the source directory containing the bash scripts
 $scriptSourceDir = ".\bash-scripts"

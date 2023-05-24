@@ -13,7 +13,7 @@ services:
       - MYSQL_USER=drupal7
       - MYSQL_PASSWORD=drupal7
     depends_on:
-      - mysql
+      - mysql7
 
   drupal10:
     image: drupal:10-apache
@@ -22,23 +22,35 @@ services:
     volumes:
       - ./drupal10:/var/www/html
     environment:
-      - MYSQL_HOST=mysql
+      - MYSQL_HOST=mysql10
       - MYSQL_DATABASE=drupal10
       - MYSQL_USER=drupal10
       - MYSQL_PASSWORD=drupal10
     depends_on:
-      - mysql
+      - mysql10
 
-  mysql:
+  mysql7:
     image: mysql:5.7
     ports:
       - 3306:3306
     volumes:
-      - ./mysql:/var/lib/mysql
+      - ./mysql7:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=drupal7
       - MYSQL_USER=drupal7
       - MYSQL_PASSWORD=drupal7
+      - MYSQL_ROOT_PASSWORD=root
+
+  mysql10:
+    image: mysql:5.7
+    ports:
+      - 3307:3306
+    volumes:
+      - ./mysql10:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=drupal10
+      - MYSQL_USER=drupal10
+      - MYSQL_PASSWORD=drupal10
       - MYSQL_ROOT_PASSWORD=root
 
   portainer-agent:
