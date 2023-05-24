@@ -1,0 +1,62 @@
+version: '3.6'
+
+services:
+  drupal7:
+    image: drupal:7-apache
+    ports:
+      - 8080:80
+    volumes:
+      - ./drupal7:/var/www/html
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_DATABASE=drupal7
+      - MYSQL_USER=drupal7
+      - MYSQL_PASSWORD=drupal7
+    depends_on:
+      - mysql
+
+  drupal10:
+    image: drupal:10-apache
+    ports:
+      - 8081:80
+    volumes:
+      - ./drupal10:/var/www/html
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_DATABASE=drupal10
+      - MYSQL_USER=drupal10
+      - MYSQL_PASSWORD=drupal10
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=drupal7
+      - MYSQL_USER=drupal7
+      - MYSQL_PASSWORD=drupal7
+      - MYSQL_ROOT_PASSWORD=root
+
+  portainer-agent:
+    image: portainer/agent
+    environment:
+      - AGENT_CLUSTER_ADDR=tasks.agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global
+
+  portainer:
+    image: portainer/portainer
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+volumes:
+  portainer_data:
