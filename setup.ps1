@@ -29,7 +29,7 @@ foreach ($serviceName in $drupalServiceNames) {
     $containerId = docker-compose -f $composeFilePath ps -q $serviceName
 
     # Determine the name of the bash script based on the container ID
-    $bashScriptName = "${serviceName}.sh"
+    $bashScriptName = "install_${serviceName}.sh"
 
     # Create the target directory in the container if it doesn't exist
     docker exec ${containerId} bash -c "apt-get update && apt-get install -y default-mysql-client unzip"
@@ -41,10 +41,10 @@ foreach ($serviceName in $drupalServiceNames) {
     # docker cp "$scriptSourceDir/$bashScriptName" ${containerId}:${scriptTargetDir}
 
     # Run the bash script inside the container
-    docker exec ${containerId} bash -c "cd ${scriptTargetDir} && chmod +x install_${bashScriptName} && ./install_${bashScriptName}"
+    docker exec ${containerId} bash -c "cd ${scriptTargetDir} && chmod +x ${bashScriptName} && ./${bashScriptName}"
     
     # Optional: Remove the copied script from the container
-    docker exec ${containerId} rm -rf ${scriptTargetDir}/install_${bashScriptName}
+    docker exec ${containerId} rm -rf ${scriptTargetDir}/${bashScriptName}
 }
 
 # Optional: Stop and remove the Docker Compose project
