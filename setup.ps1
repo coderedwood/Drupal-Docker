@@ -6,7 +6,7 @@ docker-compose -f $composeFilePath up -d
 
 # Wait for the containers to start
 Write-Host "Waiting for containers to start..."
-Start-Sleep -Seconds 10
+# Start-Sleep -Seconds 10
 
 # Countdown
 for ($i = 10; $i -gt 0; $i--) {
@@ -15,10 +15,10 @@ for ($i = 10; $i -gt 0; $i--) {
 }
 
 # Define the source directory containing the bash scripts
-$scriptSourceDir = ".\bash-scripts"
+# $scriptSourceDir = ".\bash-scripts"
 
 # Define the target directory inside the containers to copy the scripts
-$scriptTargetDir = "/scripts"
+$scriptTargetDir = "/var"
 
 # Get the list of service names for Drupal containers
 $drupalServiceNames = "drupal7", "drupal10" # Add more service names as needed
@@ -31,18 +31,20 @@ foreach ($serviceName in $drupalServiceNames) {
     # Determine the name of the bash script based on the container ID
     $bashScriptName = "${serviceName}.sh"
 
-
     # Create the target directory in the container if it doesn't exist
-    docker exec ${containerId} bash -c "mkdir -p ${scriptTargetDir}"
+    docker exec ${containerId} bash -c "apt-get update && apt-get install -y default-mysql-client unzip"
+
+    # # Create the target directory in the container if it doesn't exist
+    # docker exec ${containerId} bash -c "mkdir -p ${scriptTargetDir}"
 
     # Copy the bash script to the container
-    docker cp "$scriptSourceDir/$bashScriptName" ${containerId}:${scriptTargetDir}
+    # docker cp "$scriptSourceDir/$bashScriptName" ${containerId}:${scriptTargetDir}
 
     # Run the bash script inside the container
-    docker exec ${containerId} bash -c "cd ${scriptTargetDir} && chmod +x ${bashScriptName} && ./${bashScriptName}"
+    docker exec ${containerId} bash -c "cd ${scriptTargetDir} && chmod +x install_${bashScriptName} && ./install_${bashScriptName}"
     
     # Optional: Remove the copied script from the container
-    docker exec ${containerId} rm -rf ${scriptTargetDir}/${bashScriptName}
+    docker exec ${containerId} rm -rf ${scriptTargetDir}/install_${bashScriptName}
 }
 
 # Optional: Stop and remove the Docker Compose project

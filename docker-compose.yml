@@ -2,12 +2,11 @@ version: '3.6'
 
 services:
   drupal7:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: drupal:7-apache
     ports:
       - 8080:80
     volumes:
+      - ./apache:/etc/apache2/sites-available
       - ./drupal7:/var/www/html
       - ./bash-scripts/drupal7.sh:/var/install_drupal7.sh
     environment:
@@ -17,8 +16,6 @@ services:
       - MYSQL_PASSWORD=drupal7
     depends_on:
       - mysql7
-    networks:
-      - drupal_network
 
   mysql7:
     image: mysql:5.7
@@ -31,8 +28,6 @@ services:
       - MYSQL_USER=drupal7
       - MYSQL_PASSWORD=drupal7
       - MYSQL_ROOT_PASSWORD=root
-    networks:
-      - drupal_network
 
   portainer-agent:
     image: portainer/agent
@@ -50,9 +45,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./portainer_data:/data
-
-networks:
-  drupal_network:
 
 volumes:
   portainer_data:
