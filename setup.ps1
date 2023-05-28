@@ -31,8 +31,6 @@ foreach ($serviceName in $drupalServiceNames) {
     # Determine the name of the bash script based on the container ID
     $bashScriptName = "${serviceName}.sh"
 
-    # Install 7z in the container if it doesn't exist
-    docker exec ${containerId} bash -c "apt-get update && apt-get install unzip"
 
     # Create the target directory in the container if it doesn't exist
     docker exec ${containerId} bash -c "mkdir -p ${scriptTargetDir}"
