@@ -57,6 +57,8 @@ pull_drupal_projects() {
     # Optional: Set permissions on the sites/default/files directory
     echo "Fixing drupal sites/default directory permissions to 777"
     chmod -R 777 sites/default
+    echo "[Success]: Installation complete"
+
 }
 
 # Main script
