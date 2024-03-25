@@ -1,4 +1,8 @@
 #!/bin/bash
+# Install unzip & default-mysql-client
+install_util() {
+    apt-get update && apt-get install -y default-mysql-client unzip
+}
 
 # Install Composer
 install_composer() {
@@ -39,14 +43,19 @@ pull_drupal_projects() {
     drush site-install standard --db-url=mysql://${mysql_user}:${mysql_password}@${mysql_host}/${mysql_database} --account-name=admin --account-pass=admin_password --site-name="${site_name}" -y
 
     # Optional: Set permissions on Drupal files and folders
+    echo "Fixing drupal directory permissions to 755"
     find . -type d -exec chmod 755 {} \;
+    echo "Fixing drupal file permissions to 644"
     find . -type f -exec chmod 644 {} \;
 
     # Optional: Set permissions on the sites/default/files directory
+    echo "Fixing drupal sites/default directory permissions to 777"
     chmod -R 777 sites/default
+    echo "[Success]: Installation complete"
 }
 
 # Main script
+install_util
 install_composer
 install_drush
 pull_drupal_projects "drupal7" "7.x"
