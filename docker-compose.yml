@@ -1,20 +1,20 @@
 version: '3.6'
 
 services:
-  # drupal7:
-  #   image: drupal:7-apache
-  #   ports:
-  #     - 8080:80
-  #   volumes:
-  #     - ./drupal7:/var/www/html
-  #     - ./bash-scripts/drupal7.sh:/var/install_drupal7.sh
-  #   environment:
-  #     - MYSQL_HOST=mysql7
-  #     - MYSQL_DATABASE=drupal7
-  #     - MYSQL_USER=drupal7
-  #     - MYSQL_PASSWORD=drupal7
-  #   depends_on:
-  #     - mysql7
+  drupal7:
+    image: drupal:7-apache
+    ports:
+      - 8080:80
+    volumes:
+      - ./drupal7:/var/www/html
+      - ./bash-scripts/drupal7.sh:/var/install_drupal7.sh
+    environment:
+      - MYSQL_HOST=mysql7
+      - MYSQL_DATABASE=drupal7
+      - MYSQL_USER=drupal7
+      - MYSQL_PASSWORD=drupal7
+    depends_on:
+      - mysql7
 
   drupal10:
     image: drupal:10-apache
@@ -31,17 +31,17 @@ services:
     depends_on:
       - mysql10
 
-  # mysql7:
-  #   image: mysql:5.7
-  #   ports:
-  #     - 3306:3306
-  #   volumes:
-  #     - ./mysql7:/var/lib/mysql
-  #   environment:
-  #     - MYSQL_DATABASE=drupal7
-  #     - MYSQL_USER=drupal7
-  #     - MYSQL_PASSWORD=drupal7
-  #     - MYSQL_ROOT_PASSWORD=root
+  mysql7:
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql7:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=drupal7
+      - MYSQL_USER=drupal7
+      - MYSQL_PASSWORD=drupal7
+      - MYSQL_ROOT_PASSWORD=root
 
   mysql10:
     image: mysql:latest
