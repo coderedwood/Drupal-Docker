@@ -1,0 +1,26 @@
+FROM drupal:10-apache
+
+# Install dependencies for composer and Drush
+RUN apt-get update && apt-get install -y \
+    unzip \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Composer globally
+# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# RUN chmod +x /usr/local/bin/composer
+
+# Set working directory to Drupal root
+WORKDIR /var/www/html
+
+# Install Drush globally via composer
+RUN composer require drush/drush --no-interaction --prefer-dist --optimize-autoloader
+
+# Symlink Drush executable for easy access
+RUN ln -s /var/www/html/vendor/bin/drush /usr/local/bin/drush
+
+# Set permissions (adjust if necessary)
+# RUN chown -R www-data:www-data /var/www/html
+

@@ -17,7 +17,10 @@ services:
       - mysql7
 
   drupal10:
-    image: drupal:10-apache
+    # image: drupal:10-apache
+    build:
+      context: .
+      dockerfile: Dockerfile.drupal10
     ports:
       - 8081:80
     volumes:
